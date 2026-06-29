@@ -32,14 +32,16 @@ body {
     line-height: 1.5;
 }
 
-/* App-like Header utilizing the Base Color */
+/* =========================================
+   HEADER SECTION (Compact & Branded)
+   ========================================= */
 .header {
     text-align: center;
-    margin-bottom: 2rem;
-    padding: 2.5rem 1rem;
+    margin-bottom: 1.5rem;
+    padding: 1.5rem 1rem;
     background-color: var(--primary);
     color: white;
-    border-radius: 0 0 24px 24px; /* Smooth rounded bottom */
+    border-radius: 0 0 20px 20px;
     box-shadow: 0 4px 12px rgba(0, 25, 72, 0.15);
 }
 
@@ -47,32 +49,56 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 12px;
-    font-size: 1.5rem;
+    gap: 10px;
+    font-size: 1.25rem;
     font-weight: 700;
     color: white;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.25rem;
 }
 
 .logo svg {
-    width: 350px;
+    width: 320px; /* Perfectly scaled */
     height: auto;
-    fill: white; 
-    stroke: white;
+    fill: #FFFFFF !important; /* Forced white against navy */
+    stroke: #FFFFFF !important;
 }
 
 .header h1 {
-    font-size: 2.2rem;
+    font-size: 1.75rem;
     font-weight: 800;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.25rem;
     letter-spacing: -0.02em;
 }
 
 .header p {
     color: var(--primary-light);
-    font-size: 1.1rem;
+    font-size: 0.95rem;
 }
 
+/* Main Website Button */
+.cta-button {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 8px 20px;
+    background-color: #FFFFFF;
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.9rem;
+    border-radius: 6px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
+}
+
+.cta-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    background-color: var(--primary-light);
+}
+
+/* =========================================
+   MAIN LAYOUT & STATES
+   ========================================= */
 .container {
     max-width: 800px;
     margin: 0 auto;
@@ -99,7 +125,7 @@ body {
     to { transform: rotate(360deg); }
 }
 
-/* Error */
+/* Error Message */
 .error-container {
     text-align: center;
     background: #FEE2E2;
@@ -126,7 +152,9 @@ body {
     background: var(--primary-hover);
 }
 
-/* Leaderboard Content */
+/* =========================================
+   LEADERBOARD ROWS
+   ========================================= */
 .table-header {
     display: none;
 }
@@ -146,7 +174,7 @@ body {
 
 .row:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0, 25, 72, 0.08); /* Navy tinted shadow */
+    box-shadow: 0 6px 12px rgba(0, 25, 72, 0.08);
     border-color: #D1D5DB;
 }
 
@@ -172,7 +200,7 @@ body {
 .display-name {
     font-weight: 700;
     font-size: 1.1rem;
-    color: var(--primary); /* Names in navy */
+    color: var(--primary);
 }
 
 .phone-mask {
@@ -203,7 +231,9 @@ body {
     font-weight: 500;
 }
 
-/* Top 3 Styling */
+/* =========================================
+   TOP 3 HIGHLIGHTS
+   ========================================= */
 .row[data-rank="1"] { border-left: 6px solid var(--gold); }
 .row[data-rank="1"] .rank-badge { background: #FEF3C7; color: var(--gold); border-color: var(--gold); }
 
@@ -217,11 +247,13 @@ body {
     display: none !important;
 }
 
-/* Desktop Layout */
+/* =========================================
+   DESKTOP LAYOUT (Responsive)
+   ========================================= */
 @media (min-width: 640px) {
     .header {
-        border-radius: 0 0 32px 32px;
-        padding: 3rem 2rem;
+        border-radius: 0 0 24px 24px;
+        padding: 2rem 1.5rem; /* Compact desktop header */
     }
 
     .table-header {
@@ -259,26 +291,4 @@ body {
         padding: 0;
         font-size: 1rem;
     }
-}
-
-
-/* Main Website Button */
-.cta-button {
-    display: inline-block;
-    margin-top: 1.5rem;
-    padding: 12px 28px;
-    background-color: #FFFFFF;
-    color: var(--primary); /* Deep navy text */
-    text-decoration: none;
-    font-weight: 700;
-    font-size: 1rem;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-    transition: all 0.2s ease;
-}
-
-.cta-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-    background-color: var(--primary-light);
 }
