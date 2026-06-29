@@ -1,32 +1,42 @@
 // ⚠️ REPLACE THIS LINK with your actual published Google Sheet CSV link
 // To get it: File > Share > Publish to web > Link > Entire Document > Comma-separated values (.csv)
 
-const rawGoogleLink = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTMTCFkmw3zYU72EJL0-qLD0TRCNiwQMrKI5NJ9iLu1Ltp28gm7mHRi95mUVmtAUenymv0dKVZdwqrV/pub?output=csv';
-const CSV_URL = 'https://corsproxy.io/?' + encodeURIComponent(rawGoogleLink);
-
+// 1. Direct web-published Google Sheets CSV link
+const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTMTCFkmw3zYU72EJL0-qLD0TRCNiwQMrKI5NJ9iLu1Ltp28gm7mHRi95mUVmtAUenymv0dKVZdwqrV/pub?output=csv';
 
 document.addEventListener('DOMContentLoaded', fetchLeaderboardData);
 
 function fetchLeaderboardData() {
     toggleUI('loader');
 
-    Papa.parse(CSV_URL, {
-        download: true,
-        header: true,
-        skipEmptyLines: true,
-        complete: function(results) {
-            if (results.errors.length && results.data.length === 0) {
-                console.error("Parse Error:", results.errors);
-                toggleUI('error');
-                return;
+    // Use standard native fetch first to pull the file explicitly 
+    // This bypasses PapaParse streaming constraints on cloud CDNs
+    fetch(CSV_URL, { method: 'GET', mode: 'cors' })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP network error! Status: ${response.status}`);
             }
-            renderLeaderboard(results.data);
-        },
-        error: function(error) {
-            console.error("Network/Fetch Error:", error);
+            return response.text();
+        })
+        .then(csvText => {
+            // Hand the raw string directly to PapaParse (No streaming chunks needed)
+            Papa.parse(csvText, {
+                header: true,
+                skipEmptyLines: true,
+                complete: function(results) {
+                    if (results.errors.length && results.data.length === 0) {
+                        console.error("Parse Error:", results.errors);
+                        toggleUI('error');
+                        return;
+                    }
+                    renderLeaderboard(results.data);
+                }
+            });
+        })
+        .catch(error => {
+            console.error("Fetch pipeline failed:", error);
             toggleUI('error');
-        }
-    });
+        });
 }
 
 function renderLeaderboard(data) {
