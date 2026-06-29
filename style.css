@@ -1,0 +1,284 @@
+:root {
+    /* C-Transit Brand Colors */
+    --primary: #001948; /* Deep Navy Base */
+    --primary-light: #E6E9F0; /* Soft tint for text inside the dark header */
+    --primary-hover: #002875;
+    
+    /* Layout Colors */
+    --background: #F4F5F7; /* Slightly cooler background to complement navy */
+    --card-bg: #FFFFFF;
+    
+    /* Text & Borders */
+    --text-main: #1F2937;
+    --text-muted: #6B7280;
+    --border: #E5E7EB;
+    
+    /* Top 3 Accents - Warmed up to contrast against the navy */
+    --gold: #F59E0B;
+    --silver: #9CA3AF;
+    --bronze: #D97706;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+    background-color: var(--background);
+    color: var(--text-main);
+    line-height: 1.5;
+}
+
+/* App-like Header utilizing the Base Color */
+.header {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding: 2.5rem 1rem;
+    background-color: var(--primary);
+    color: white;
+    border-radius: 0 0 24px 24px; /* Smooth rounded bottom */
+    box-shadow: 0 4px 12px rgba(0, 25, 72, 0.15);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 0.5rem;
+}
+
+.logo svg {
+    width: 350px;
+    height: auto;
+    fill: white; 
+    stroke: white;
+}
+
+.header h1 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.02em;
+}
+
+.header p {
+    color: var(--primary-light);
+    font-size: 1.1rem;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 20px 40px;
+}
+
+/* Loader */
+.loader-container {
+    text-align: center;
+    padding: 4rem 0;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid var(--border);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    margin: 0 auto 1rem;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Error */
+.error-container {
+    text-align: center;
+    background: #FEE2E2;
+    color: #991B1B;
+    padding: 2rem;
+    border-radius: 12px;
+    margin-top: 2rem;
+    border: 1px solid #FCA5A5;
+}
+
+.error-container button {
+    margin-top: 1rem;
+    padding: 10px 20px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.2s;
+}
+
+.error-container button:hover {
+    background: var(--primary-hover);
+}
+
+/* Leaderboard Content */
+.table-header {
+    display: none;
+}
+
+.row {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.row:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 25, 72, 0.08); /* Navy tinted shadow */
+    border-color: #D1D5DB;
+}
+
+.rank-badge {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--background);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    flex-shrink: 0;
+    border: 2px solid transparent;
+}
+
+.user-info {
+    flex-grow: 1;
+}
+
+.display-name {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--primary); /* Names in navy */
+}
+
+.phone-mask {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+
+.stats {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+}
+
+.points {
+    font-weight: 800;
+    color: var(--primary);
+    font-size: 1.3rem;
+}
+
+.reports {
+    font-size: 0.85rem;
+    color: var(--text-main);
+    background: var(--background);
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-weight: 500;
+}
+
+/* Top 3 Styling */
+.row[data-rank="1"] { border-left: 6px solid var(--gold); }
+.row[data-rank="1"] .rank-badge { background: #FEF3C7; color: var(--gold); border-color: var(--gold); }
+
+.row[data-rank="2"] { border-left: 6px solid var(--silver); }
+.row[data-rank="2"] .rank-badge { background: #F3F4F6; color: var(--silver); border-color: var(--silver); }
+
+.row[data-rank="3"] { border-left: 6px solid var(--bronze); }
+.row[data-rank="3"] .rank-badge { background: #FEF3C7; color: var(--bronze); border-color: var(--bronze); }
+
+.hidden {
+    display: none !important;
+}
+
+/* Desktop Layout */
+@media (min-width: 640px) {
+    .header {
+        border-radius: 0 0 32px 32px;
+        padding: 3rem 2rem;
+    }
+
+    .table-header {
+        display: grid;
+        grid-template-columns: 70px 2fr 1fr 1fr;
+        padding: 0 16px 12px;
+        font-weight: 700;
+        color: var(--text-muted);
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+    
+    .row {
+        display: grid;
+        grid-template-columns: 70px 2fr 1fr 1fr;
+        align-items: center;
+        padding: 14px 16px;
+    }
+
+    .stats {
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 0;
+        display: contents;
+    }
+
+    .points {
+        font-size: 1.2rem;
+    }
+
+    .reports {
+        background: transparent;
+        padding: 0;
+        font-size: 1rem;
+    }
+}
+
+
+/* Main Website Button */
+.cta-button {
+    display: inline-block;
+    margin-top: 1.5rem;
+    padding: 12px 28px;
+    background-color: #FFFFFF;
+    color: var(--primary); /* Deep navy text */
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
+}
+
+.cta-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    background-color: var(--primary-light);
+}
