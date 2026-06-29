@@ -1,42 +1,30 @@
-// ⚠️ REPLACE THIS LINK with your actual published Google Sheet CSV link
-// To get it: File > Share > Publish to web > Link > Entire Document > Comma-separated values (.csv)
-
-// 1. Direct web-published Google Sheets CSV link
-const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTMTCFkmw3zYU72EJL0-qLD0TRCNiwQMrKI5NJ9iLu1Ltp28gm7mHRi95mUVmtAUenymv0dKVZdwqrV/pub?output=csv';
+// The Google Visualization API endpoint bypasses redirects and proxies entirely.
+const SHEET_ID = '1lbHYvt5MaUBn4RwVOXse-6z0g6QxuTDDQ_R70OzjSvg';
+const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`;
 
 document.addEventListener('DOMContentLoaded', fetchLeaderboardData);
 
 function fetchLeaderboardData() {
     toggleUI('loader');
 
-    // Use standard native fetch first to pull the file explicitly 
-    // This bypasses PapaParse streaming constraints on cloud CDNs
-    fetch(CSV_URL, { method: 'GET', mode: 'cors' })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP network error! Status: ${response.status}`);
+    // We can confidently use PapaParse natively again without fetch() wrappers
+    Papa.parse(CSV_URL, {
+        download: true,
+        header: true,
+        skipEmptyLines: true,
+        complete: function(results) {
+            if (results.errors.length && results.data.length === 0) {
+                console.error("Parse Error:", results.errors);
+                toggleUI('error');
+                return;
             }
-            return response.text();
-        })
-        .then(csvText => {
-            // Hand the raw string directly to PapaParse (No streaming chunks needed)
-            Papa.parse(csvText, {
-                header: true,
-                skipEmptyLines: true,
-                complete: function(results) {
-                    if (results.errors.length && results.data.length === 0) {
-                        console.error("Parse Error:", results.errors);
-                        toggleUI('error');
-                        return;
-                    }
-                    renderLeaderboard(results.data);
-                }
-            });
-        })
-        .catch(error => {
-            console.error("Fetch pipeline failed:", error);
+            renderLeaderboard(results.data);
+        },
+        error: function(error) {
+            console.error("Network/Fetch Error:", error);
             toggleUI('error');
-        });
+        }
+    });
 }
 
 function renderLeaderboard(data) {
@@ -44,7 +32,7 @@ function renderLeaderboard(data) {
     container.innerHTML = ''; // Clear existing content
 
     data.forEach(user => {
-        // Ensure we have data before rendering (Google Sheets sometimes outputs blank rows at the end)
+        // Ensure we have data before rendering
         if (!user['Rank'] || !user['Phone Number']) return;
 
         const maskedPhone = maskPhoneNumber(user['Phone Number']);
@@ -75,28 +63,26 @@ function renderLeaderboard(data) {
 
 // CRITICAL PRIVACY: Mask phone number (e.g., 0801***5678)
 function maskPhoneNumber(phone) {
-    // Strip any accidental whitespace
     const cleanPhone = String(phone).trim();
     
     if (cleanPhone.length < 8) {
-        return "***"; // Fallback for unusually short data
+        return "***"; 
     }
     
-    // Grab first 4 and last 4 digits, put *** in the middle
     const firstPart = cleanPhone.substring(0, 4);
     const lastPart = cleanPhone.substring(cleanPhone.length - 4);
     
     return `${firstPart}***${lastPart}`;
 }
 
-// Utility: Prevent XSS attacks from raw sheet data
+// Utility: Prevent XSS attacks
 function escapeHTML(str) {
     const div = document.createElement('div');
     div.textContent = str;
     return div.innerHTML;
 }
 
-// Utility: Toggle between Loading, Error, and Leaderboard views
+// Utility: Toggle views
 function toggleUI(state) {
     const loader = document.getElementById('loader');
     const errorMsg = document.getElementById('error-message');
@@ -111,5 +97,5 @@ function toggleUI(state) {
     if (state === 'success') leaderboard.classList.remove('hidden');
 }
 
-// Automatically refresh the leaderboard data every 5 minutes (300,000 milliseconds)
+// Automatically refresh data every 5 minutes
 setInterval(fetchLeaderboardData, 300000);
